@@ -3,6 +3,7 @@ const app = express();
 const crypto = require("crypto");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { rawListeners } = require("process");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -78,6 +79,19 @@ const STUDENTS = [
 
 
 app.get("/api", (req, res) => {
+  const page = parseInt(req.query.page)
+  const limit = parseInt(req.query.limit)
+  const startIndex =(page-1)*limit
+  const endIndex =page*limit
+  const results = {}
+  if(endIndex<students.length){
+    results.next = {
+      page:page +1,
+      limit:limit
+    }
+  }
+  results.results=students.slice(startIndex,endIndex)
+  res.json(results)
   res.send("Welcome to Our API!");
 });
 
