@@ -156,7 +156,7 @@ app.get("/api/students/:id", async (req, res) => {
 
 
 //delete artist by ID
-app.delete("/api/artists/:id", async (req, res) => {
+app.delete("/api/students/:id", async (req, res) => {
   const id = req.params.id;
   const student = await StudentModel.findByIdAndDelete(id);
   if (student === undefined) {
@@ -172,15 +172,15 @@ app.delete("/api/artists/:id", async (req, res) => {
 //post
 app.post("/api/students", async (req, res) => {
   const { name, surname, birthdate, occupation, isMarriend, GPA } = req.body;
-  const newStudent = {
+  const newStudent = new StudentModel({ 
     id: crypto.randomUUID(),
     name: name,
     surname: surname,
     birthdate: birthdate,
     occupation: occupation,
     isMarriend: isMarriend,
-    GPA: GPA,
-  };
+    GPA: GPA
+  });
   await newStudent.save();
   res.status(201).send("created");
 });
